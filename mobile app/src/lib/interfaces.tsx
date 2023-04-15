@@ -35,52 +35,26 @@ export interface User {
   
 
   export interface UserSignUp {
-    SDGs: any
+    SDGs: string
     adLink: string
-    addedBy: any
     addrLine1: string
-    address_line_1: any
-    address_line_2: any
     addrline2: string
-    age: any
-    blob: any
     city: string
-    colony_name: any
-    company_domains: any
-    crater_name: any
-    createdAt: string
     demLink: string
-    dob: any
+    dob: string
     email: string
-    experience: any
+    experience: string
     fname: string
-    hobbies: any
-    id: number
+    hobbies: string
     imgLink: string
-    impact_domains: any
     income: string
-    investment_frequency: any
-    isActive: boolean
-    isAuth: any
-    isDeleted: boolean
     lname: string
     middle: string
-    mobileNo: any
-    name: any
-    notif_token: any
     otp: string
     phone: string
-    phone_number: any
     pinCode: string
-    pincode: any
-    profession: any
-    profile_img: any
-    sign_img: any
+    profession: string
     singLink: string
     state: string
-    token: string
-    updatedAt: string
-    updatedBy: any
-    userType: number
   }
   

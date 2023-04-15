@@ -8,7 +8,7 @@ import {
   TouchableOpacity,
   TextInput,
 } from "react-native";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import SafeArea from "../components/SafeArea";
 import { FontAwesome } from "@expo/vector-icons";
 import Navbar from "../components/Navbar";
@@ -71,7 +71,10 @@ const Search = ({ navigation }: any) => {
   const [DATA, setData] = useState(NseData.data);
   const [renderData, setrenderData] = useState(NseData.data);
   const [IsOpen, setIsOpen] = useState(false);
-
+  useEffect(() => {
+    
+  }, [])
+  
   const TouchableOpacityComponent = (Data: any) => {
     return (
       <TouchableOpacity

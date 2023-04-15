@@ -16,6 +16,7 @@ export const SignUpFun = async (
   token: string
 ) => {
   console.log(pass)
+  console.log(obj)
   const res = await axios.post(
     baseUrl + "/admin/user/create",
     {
@@ -23,15 +24,15 @@ export const SignUpFun = async (
       email: obj.email,
       name: obj.fname + " " + obj.lname,
       userType: 2,
-      phone_number: obj.mobileNo,
-      profile_img: obj.profile_img,
-      sign_img: obj.sign_img,
-      address_line_1: obj.address_line_1,
-      address_line_2: obj.address_line_2,
+      phone_number: obj.phone,
+      profile_img: obj.imgLink,
+      sign_img: obj.singLink,
+      address_line_1: obj.addrLine1,
+      address_line_2: obj.addrline2,
       crater_name: obj.fname + " " + obj.lname,
-      colony_name: obj.colony_name,
-      pincode: obj.pincode,
-      age: obj.age,
+      colony_name: obj.state,
+      pincode: obj.pinCode,
+      age: 50,
       profession: obj.profession,
       experience: obj.experience,
       dob: obj.dob,
