@@ -7,6 +7,8 @@ const dbConnection = require('../config/dbConnection');
 const db = {};
 db.sequelize = dbConnection;
 
+db.portfolio = require('./portfolio');
+db.open_order = require('./open_order');
 db.investment = require('./investment');
 db.user = require('./user');
 db.userAuthSettings = require('./userAuthSettings');
@@ -16,6 +18,42 @@ db.projectRoute = require('./projectRoute');
 db.routeRole = require('./routeRole');
 db.userRole = require('./userRole');
 
+db.portfolio.belongsTo(db.user, {
+  foreignKey: 'addedBy',
+  as: '_addedBy',
+  targetKey: 'id' 
+});
+db.user.hasMany(db.portfolio, {
+  foreignKey: 'addedBy',
+  sourceKey: 'id' 
+});
+db.portfolio.belongsTo(db.user, {
+  foreignKey: 'updatedBy',
+  as: '_updatedBy',
+  targetKey: 'id' 
+});
+db.user.hasMany(db.portfolio, {
+  foreignKey: 'updatedBy',
+  sourceKey: 'id' 
+});
+db.open_order.belongsTo(db.user, {
+  foreignKey: 'addedBy',
+  as: '_addedBy',
+  targetKey: 'id' 
+});
+db.user.hasMany(db.open_order, {
+  foreignKey: 'addedBy',
+  sourceKey: 'id' 
+});
+db.open_order.belongsTo(db.user, {
+  foreignKey: 'updatedBy',
+  as: '_updatedBy',
+  targetKey: 'id' 
+});
+db.user.hasMany(db.open_order, {
+  foreignKey: 'updatedBy',
+  sourceKey: 'id' 
+});
 db.investment.belongsTo(db.user, {
   foreignKey: 'addedBy',
   as: '_addedBy',

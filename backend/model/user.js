@@ -39,6 +39,10 @@ let User = sequelize.define('user',{
   experience:{ type:DataTypes.STRING },
   dob:{ type:DataTypes.DATE },
   hobbies:{ type:DataTypes.STRING },
+  SDGs:{ type:DataTypes.STRING },
+  investment_frequency:{ type:DataTypes.STRING },
+  company_domains:{ type:DataTypes.STRING },
+  impact_domains:{ type:DataTypes.STRING },
   blob:{ type:DataTypes.STRING },
   mobileNo:{ type:DataTypes.STRING }
 }

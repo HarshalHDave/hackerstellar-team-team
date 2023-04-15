@@ -5,6 +5,8 @@
 const express =  require('express');
 const router =  express.Router();
 router.use('/admin/auth',require('./auth'));
+router.use(require('./portfolioRoutes'));
+router.use(require('./open_orderRoutes'));
 router.use(require('./investmentRoutes'));
 router.use(require('./userRoutes'));
 router.use(require('./roleRoutes'));

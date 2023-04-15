@@ -32,6 +32,10 @@ exports.schemaKeys = joi.object({
   experience: joi.string().allow(null).allow(''),
   dob: joi.date().options({ convert: true }).allow(null).allow(''),
   hobbies: joi.string().allow(null).allow(''),
+  SDGs: joi.string().allow(null).allow(''),
+  investment_frequency: joi.string().allow(null).allow(''),
+  company_domains: joi.string().allow(null).allow(''),
+  impact_domains: joi.string().allow(null).allow(''),
   blob: joi.string().allow(null).allow(''),
   mobileNo: joi.string().allow(null).allow('')
 }).unknown(true);
@@ -57,6 +61,10 @@ exports.updateSchemaKeys = joi.object({
   experience: joi.string().allow(null).allow(''),
   dob: joi.date().options({ convert: true }).allow(null).allow(''),
   hobbies: joi.string().allow(null).allow(''),
+  SDGs: joi.string().allow(null).allow(''),
+  investment_frequency: joi.string().allow(null).allow(''),
+  company_domains: joi.string().allow(null).allow(''),
+  impact_domains: joi.string().allow(null).allow(''),
   blob: joi.string().allow(null).allow(''),
   mobileNo: joi.string().allow(null).allow(''),
   id: joi.number().integer()
@@ -87,6 +95,10 @@ exports.findFilterKeys = joi.object({
       experience: joi.alternatives().try(joi.array().items(),joi.string(),joi.object()),
       dob: joi.alternatives().try(joi.array().items(),joi.date().options({ convert: true }),joi.object()),
       hobbies: joi.alternatives().try(joi.array().items(),joi.string(),joi.object()),
+      SDGs: joi.alternatives().try(joi.array().items(),joi.string(),joi.object()),
+      investment_frequency: joi.alternatives().try(joi.array().items(),joi.string(),joi.object()),
+      company_domains: joi.alternatives().try(joi.array().items(),joi.string(),joi.object()),
+      impact_domains: joi.alternatives().try(joi.array().items(),joi.string(),joi.object()),
       blob: joi.alternatives().try(joi.array().items(),joi.string(),joi.object()),
       mobileNo: joi.alternatives().try(joi.array().items(),joi.string(),joi.object()),
       id: joi.any()

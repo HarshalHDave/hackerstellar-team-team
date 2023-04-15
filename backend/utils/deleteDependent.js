@@ -3,6 +3,8 @@
  * @description :: exports deleteDependent service for project.
  */
 
+let Portfolio = require('../model/portfolio');
+let Open_order = require('../model/open_order');
 let Investment = require('../model/investment');
 let User = require('../model/user');
 let UserAuthSettings = require('../model/userAuthSettings');
@@ -12,6 +14,24 @@ let ProjectRoute = require('../model/projectRoute');
 let RouteRole = require('../model/routeRole');
 let UserRole = require('../model/userRole');
 let dbService = require('.//dbService');
+
+const deletePortfolio = async (filter) =>{
+  try {
+    let response  = await dbService.destroy(Portfolio,filter);
+    return response;
+  } catch (error){
+    throw new Error(error.message);
+  }
+};
+
+const deleteOpen_order = async (filter) =>{
+  try {
+    let response  = await dbService.destroy(Open_order,filter);
+    return response;
+  } catch (error){
+    throw new Error(error.message);
+  }
+};
 
 const deleteInvestment = async (filter) =>{
   try {
@@ -27,6 +47,12 @@ const deleteUser = async (filter) =>{
     let user = await dbService.findAll(User,filter);
     if (user && user.length){
       user = user.map((obj) => obj.id);
+
+      const portfolioFilter = { $or: [{ addedBy : { $in : user } },{ updatedBy : { $in : user } }] };
+      const portfolioCnt = await dbService.destroy(Portfolio,portfolioFilter);
+
+      const open_orderFilter = { $or: [{ addedBy : { $in : user } },{ updatedBy : { $in : user } }] };
+      const open_orderCnt = await dbService.destroy(Open_order,open_orderFilter);
 
       const investmentFilter = { $or: [{ addedBy : { $in : user } },{ updatedBy : { $in : user } }] };
       const investmentCnt = await dbService.destroy(Investment,investmentFilter);
@@ -45,6 +71,8 @@ const deleteUser = async (filter) =>{
 
       let deleted  = await dbService.destroy(User,filter);
       let response = {
+        portfolio :portfolioCnt.length,
+        open_order :open_orderCnt.length,
         investment :investmentCnt.length,
         user :userCnt.length + deleted.length,
         userAuthSettings :userAuthSettingsCnt.length,
@@ -145,6 +173,24 @@ const deleteUserRole = async (filter) =>{
   }
 };
 
+const countPortfolio = async (filter) =>{
+  try {
+    const portfolioCnt =  await dbService.count(Portfolio,filter);
+    return { portfolio : portfolioCnt };
+  } catch (error){
+    throw new Error(error.message);
+  }
+};
+
+const countOpen_order = async (filter) =>{
+  try {
+    const open_orderCnt =  await dbService.count(Open_order,filter);
+    return { open_order : open_orderCnt };
+  } catch (error){
+    throw new Error(error.message);
+  }
+};
+
 const countInvestment = async (filter) =>{
   try {
     const investmentCnt =  await dbService.count(Investment,filter);
@@ -159,6 +205,12 @@ const countUser = async (filter) =>{
     let user = await dbService.findAll(User,filter);
     if (user && user.length){
       user = user.map((obj) => obj.id);
+
+      const portfolioFilter = { $or: [{ addedBy : { $in : user } },{ updatedBy : { $in : user } }] };
+      const portfolioCnt =  await dbService.count(Portfolio,portfolioFilter);
+
+      const open_orderFilter = { $or: [{ addedBy : { $in : user } },{ updatedBy : { $in : user } }] };
+      const open_orderCnt =  await dbService.count(Open_order,open_orderFilter);
 
       const investmentFilter = { $or: [{ addedBy : { $in : user } },{ updatedBy : { $in : user } }] };
       const investmentCnt =  await dbService.count(Investment,investmentFilter);
@@ -176,6 +228,8 @@ const countUser = async (filter) =>{
       const userRoleCnt =  await dbService.count(UserRole,userRoleFilter);
 
       let response = {
+        portfolio : portfolioCnt,
+        open_order : open_orderCnt,
         investment : investmentCnt,
         user : userCnt,
         userAuthSettings : userAuthSettingsCnt,
@@ -271,6 +325,24 @@ const countUserRole = async (filter) =>{
   }
 };
 
+const softDeletePortfolio = async (filter,updateBody) =>{  
+  try {
+    const portfolioCnt =  await dbService.update(Portfolio,filter);
+    return { portfolio : portfolioCnt };
+  } catch (error){
+    throw new Error(error.message);
+  }
+};
+
+const softDeleteOpen_order = async (filter,updateBody) =>{  
+  try {
+    const open_orderCnt =  await dbService.update(Open_order,filter);
+    return { open_order : open_orderCnt };
+  } catch (error){
+    throw new Error(error.message);
+  }
+};
+
 const softDeleteInvestment = async (filter,updateBody) =>{  
   try {
     const investmentCnt =  await dbService.update(Investment,filter);
@@ -285,6 +357,12 @@ const softDeleteUser = async (filter,updateBody) =>{
     let user = await dbService.findAll(User,filter, { id:1 });
     if (user.length){
       user = user.map((obj) => obj.id);
+
+      const portfolioFilter = { '$or': [{ addedBy : { '$in' : user } },{ updatedBy : { '$in' : user } }] };
+      const portfolioCnt = await dbService.update(Portfolio,portfolioFilter,updateBody);
+
+      const open_orderFilter = { '$or': [{ addedBy : { '$in' : user } },{ updatedBy : { '$in' : user } }] };
+      const open_orderCnt = await dbService.update(Open_order,open_orderFilter,updateBody);
 
       const investmentFilter = { '$or': [{ addedBy : { '$in' : user } },{ updatedBy : { '$in' : user } }] };
       const investmentCnt = await dbService.update(Investment,investmentFilter,updateBody);
@@ -303,6 +381,8 @@ const softDeleteUser = async (filter,updateBody) =>{
       let updated = await dbService.update(User,filter,updateBody);
 
       let response = {
+        portfolio :portfolioCnt.length,
+        open_order :open_orderCnt.length,
         investment :investmentCnt.length,
         user :userCnt.length + updated.length,
         userAuthSettings :userAuthSettingsCnt.length,
@@ -401,6 +481,8 @@ const softDeleteUserRole = async (filter,updateBody) =>{
 };
 
 module.exports = {
+  deletePortfolio,
+  deleteOpen_order,
   deleteInvestment,
   deleteUser,
   deleteUserAuthSettings,
@@ -409,6 +491,8 @@ module.exports = {
   deleteProjectRoute,
   deleteRouteRole,
   deleteUserRole,
+  countPortfolio,
+  countOpen_order,
   countInvestment,
   countUser,
   countUserAuthSettings,
@@ -417,6 +501,8 @@ module.exports = {
   countProjectRoute,
   countRouteRole,
   countUserRole,
+  softDeletePortfolio,
+  softDeleteOpen_order,
   softDeleteInvestment,
   softDeleteUser,
   softDeleteUserAuthSettings,
