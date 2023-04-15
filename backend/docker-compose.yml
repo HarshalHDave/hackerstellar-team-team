@@ -20,7 +20,7 @@ services:
     image: mysql
     environment:
       MYSQL_ROOT_PASSWORD: root
-      MYSQL_DATABASE: mydb
+      MYSQL_DATABASE: hackerstellar
     networks:
       - node-network
 volumes:
