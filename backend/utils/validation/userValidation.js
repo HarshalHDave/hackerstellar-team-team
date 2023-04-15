@@ -31,9 +31,7 @@ exports.schemaKeys = joi.object({
   profession: joi.string().allow(null).allow(''),
   experience: joi.string().allow(null).allow(''),
   dob: joi.date().options({ convert: true }).allow(null).allow(''),
-  hobby1: joi.string().allow(null).allow(''),
-  hobby2: joi.string().allow(null).allow(''),
-  hobby3: joi.string().allow(null).allow(''),
+  hobbies: joi.string().allow(null).allow(''),
   blob: joi.string().allow(null).allow(''),
   mobileNo: joi.string().allow(null).allow('')
 }).unknown(true);
@@ -58,9 +56,7 @@ exports.updateSchemaKeys = joi.object({
   profession: joi.string().allow(null).allow(''),
   experience: joi.string().allow(null).allow(''),
   dob: joi.date().options({ convert: true }).allow(null).allow(''),
-  hobby1: joi.string().allow(null).allow(''),
-  hobby2: joi.string().allow(null).allow(''),
-  hobby3: joi.string().allow(null).allow(''),
+  hobbies: joi.string().allow(null).allow(''),
   blob: joi.string().allow(null).allow(''),
   mobileNo: joi.string().allow(null).allow(''),
   id: joi.number().integer()
@@ -90,9 +86,7 @@ exports.findFilterKeys = joi.object({
       profession: joi.alternatives().try(joi.array().items(),joi.string(),joi.object()),
       experience: joi.alternatives().try(joi.array().items(),joi.string(),joi.object()),
       dob: joi.alternatives().try(joi.array().items(),joi.date().options({ convert: true }),joi.object()),
-      hobby1: joi.alternatives().try(joi.array().items(),joi.string(),joi.object()),
-      hobby2: joi.alternatives().try(joi.array().items(),joi.string(),joi.object()),
-      hobby3: joi.alternatives().try(joi.array().items(),joi.string(),joi.object()),
+      hobbies: joi.alternatives().try(joi.array().items(),joi.string(),joi.object()),
       blob: joi.alternatives().try(joi.array().items(),joi.string(),joi.object()),
       mobileNo: joi.alternatives().try(joi.array().items(),joi.string(),joi.object()),
       id: joi.any()

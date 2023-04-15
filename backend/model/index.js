@@ -7,6 +7,7 @@ const dbConnection = require('../config/dbConnection');
 const db = {};
 db.sequelize = dbConnection;
 
+db.investment = require('./investment');
 db.user = require('./user');
 db.userAuthSettings = require('./userAuthSettings');
 db.userTokens = require('./userTokens');
@@ -15,6 +16,24 @@ db.projectRoute = require('./projectRoute');
 db.routeRole = require('./routeRole');
 db.userRole = require('./userRole');
 
+db.investment.belongsTo(db.user, {
+  foreignKey: 'addedBy',
+  as: '_addedBy',
+  targetKey: 'id' 
+});
+db.user.hasMany(db.investment, {
+  foreignKey: 'addedBy',
+  sourceKey: 'id' 
+});
+db.investment.belongsTo(db.user, {
+  foreignKey: 'updatedBy',
+  as: '_updatedBy',
+  targetKey: 'id' 
+});
+db.user.hasMany(db.investment, {
+  foreignKey: 'updatedBy',
+  sourceKey: 'id' 
+});
 db.user.belongsTo(db.user, {
   foreignKey: 'addedBy',
   as: '_addedBy',

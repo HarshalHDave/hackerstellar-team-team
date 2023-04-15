@@ -3,6 +3,7 @@
  * @description :: exports deleteDependent service for project.
  */
 
+let Investment = require('../model/investment');
 let User = require('../model/user');
 let UserAuthSettings = require('../model/userAuthSettings');
 let UserTokens = require('../model/userTokens');
@@ -12,11 +13,23 @@ let RouteRole = require('../model/routeRole');
 let UserRole = require('../model/userRole');
 let dbService = require('.//dbService');
 
+const deleteInvestment = async (filter) =>{
+  try {
+    let response  = await dbService.destroy(Investment,filter);
+    return response;
+  } catch (error){
+    throw new Error(error.message);
+  }
+};
+
 const deleteUser = async (filter) =>{
   try {
     let user = await dbService.findAll(User,filter);
     if (user && user.length){
       user = user.map((obj) => obj.id);
+
+      const investmentFilter = { $or: [{ addedBy : { $in : user } },{ updatedBy : { $in : user } }] };
+      const investmentCnt = await dbService.destroy(Investment,investmentFilter);
 
       const userFilter = { $or: [{ addedBy : { $in : user } },{ updatedBy : { $in : user } }] };
       const userCnt = await dbService.destroy(User,userFilter);
@@ -32,6 +45,7 @@ const deleteUser = async (filter) =>{
 
       let deleted  = await dbService.destroy(User,filter);
       let response = {
+        investment :investmentCnt.length,
         user :userCnt.length + deleted.length,
         userAuthSettings :userAuthSettingsCnt.length,
         userTokens :userTokensCnt.length,
@@ -131,11 +145,23 @@ const deleteUserRole = async (filter) =>{
   }
 };
 
+const countInvestment = async (filter) =>{
+  try {
+    const investmentCnt =  await dbService.count(Investment,filter);
+    return { investment : investmentCnt };
+  } catch (error){
+    throw new Error(error.message);
+  }
+};
+
 const countUser = async (filter) =>{
   try {
     let user = await dbService.findAll(User,filter);
     if (user && user.length){
       user = user.map((obj) => obj.id);
+
+      const investmentFilter = { $or: [{ addedBy : { $in : user } },{ updatedBy : { $in : user } }] };
+      const investmentCnt =  await dbService.count(Investment,investmentFilter);
 
       const userFilter = { $or: [{ addedBy : { $in : user } },{ updatedBy : { $in : user } }] };
       const userCnt =  await dbService.count(User,userFilter);
@@ -150,6 +176,7 @@ const countUser = async (filter) =>{
       const userRoleCnt =  await dbService.count(UserRole,userRoleFilter);
 
       let response = {
+        investment : investmentCnt,
         user : userCnt,
         userAuthSettings : userAuthSettingsCnt,
         userTokens : userTokensCnt,
@@ -244,11 +271,23 @@ const countUserRole = async (filter) =>{
   }
 };
 
+const softDeleteInvestment = async (filter,updateBody) =>{  
+  try {
+    const investmentCnt =  await dbService.update(Investment,filter);
+    return { investment : investmentCnt };
+  } catch (error){
+    throw new Error(error.message);
+  }
+};
+
 const softDeleteUser = async (filter,updateBody) =>{  
   try {
     let user = await dbService.findAll(User,filter, { id:1 });
     if (user.length){
       user = user.map((obj) => obj.id);
+
+      const investmentFilter = { '$or': [{ addedBy : { '$in' : user } },{ updatedBy : { '$in' : user } }] };
+      const investmentCnt = await dbService.update(Investment,investmentFilter,updateBody);
 
       const userFilter = { '$or': [{ addedBy : { '$in' : user } },{ updatedBy : { '$in' : user } }] };
       const userCnt = await dbService.update(User,userFilter,updateBody);
@@ -264,6 +303,7 @@ const softDeleteUser = async (filter,updateBody) =>{
       let updated = await dbService.update(User,filter,updateBody);
 
       let response = {
+        investment :investmentCnt.length,
         user :userCnt.length + updated.length,
         userAuthSettings :userAuthSettingsCnt.length,
         userTokens :userTokensCnt.length,
@@ -361,6 +401,7 @@ const softDeleteUserRole = async (filter,updateBody) =>{
 };
 
 module.exports = {
+  deleteInvestment,
   deleteUser,
   deleteUserAuthSettings,
   deleteUserTokens,
@@ -368,6 +409,7 @@ module.exports = {
   deleteProjectRoute,
   deleteRouteRole,
   deleteUserRole,
+  countInvestment,
   countUser,
   countUserAuthSettings,
   countUserTokens,
@@ -375,6 +417,7 @@ module.exports = {
   countProjectRoute,
   countRouteRole,
   countUserRole,
+  softDeleteInvestment,
   softDeleteUser,
   softDeleteUserAuthSettings,
   softDeleteUserTokens,
