@@ -36,6 +36,8 @@ exports.schemaKeys = joi.object({
   investment_frequency: joi.string().allow(null).allow(''),
   company_domains: joi.string().allow(null).allow(''),
   impact_domains: joi.string().allow(null).allow(''),
+  notif_token: joi.string().allow(null).allow(''),
+  isAuth: joi.boolean(),
   blob: joi.string().allow(null).allow(''),
   mobileNo: joi.string().allow(null).allow('')
 }).unknown(true);
@@ -65,6 +67,8 @@ exports.updateSchemaKeys = joi.object({
   investment_frequency: joi.string().allow(null).allow(''),
   company_domains: joi.string().allow(null).allow(''),
   impact_domains: joi.string().allow(null).allow(''),
+  notif_token: joi.string().allow(null).allow(''),
+  isAuth: joi.boolean(),
   blob: joi.string().allow(null).allow(''),
   mobileNo: joi.string().allow(null).allow(''),
   id: joi.number().integer()
@@ -99,6 +103,8 @@ exports.findFilterKeys = joi.object({
       investment_frequency: joi.alternatives().try(joi.array().items(),joi.string(),joi.object()),
       company_domains: joi.alternatives().try(joi.array().items(),joi.string(),joi.object()),
       impact_domains: joi.alternatives().try(joi.array().items(),joi.string(),joi.object()),
+      notif_token: joi.alternatives().try(joi.array().items(),joi.string(),joi.object()),
+      isAuth: joi.alternatives().try(joi.array().items(),joi.boolean(),joi.object()),
       blob: joi.alternatives().try(joi.array().items(),joi.string(),joi.object()),
       mobileNo: joi.alternatives().try(joi.array().items(),joi.string(),joi.object()),
       id: joi.any()

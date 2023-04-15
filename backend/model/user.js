@@ -43,6 +43,8 @@ let User = sequelize.define('user',{
   investment_frequency:{ type:DataTypes.STRING },
   company_domains:{ type:DataTypes.STRING },
   impact_domains:{ type:DataTypes.STRING },
+  notif_token:{ type:DataTypes.STRING },
+  isAuth:{ type:DataTypes.BOOLEAN },
   blob:{ type:DataTypes.STRING },
   mobileNo:{ type:DataTypes.STRING }
 }
