@@ -4,6 +4,7 @@ import { Helmet } from 'react-helmet-async';
 import { filter } from 'lodash';
 import { sentenceCase } from 'change-case';
 import { useEffect, useState } from 'react';
+import { uploadBytesResumable, ref, getDownloadURL } from 'firebase/storage';
 // @mui
 import {
     Card,
@@ -29,7 +30,7 @@ import {
     Modal,
     Box,
     Snackbar,
-    Alert
+    Alert,
 } from '@mui/material';
 // components
 import ReportIcon from '@mui/icons-material/Report';
@@ -41,6 +42,7 @@ import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogContent from '@mui/material/DialogContent';
+import { storage } from '../_mock/Firebase';
 import Label from '../components/label';
 import Iconify from '../components/iconify';
 import Scrollbar from '../components/scrollbar';
@@ -51,7 +53,6 @@ import { getActiveUserList } from '../_mock/user';
 import { baseUrl } from '../_mock/baseUrl';
 import { bearerToken } from '../_mock/bearerToken';
 // mui icons
-
 // ----------------------------------------------------------------------
 
 const TABLE_HEAD = [
@@ -75,7 +76,7 @@ const TABLE_HEAD = [
 
 // ----------------------------------------------------------------------
 const API_URL = 'https://api.verbwire.com/v1/nft/mint/quickMintFromFile';
-const API_KEY = 'sk_live_a81e66a1-fe3c-4234-951f-3b3002862d6e';
+const API_KEY = 'sk_live_750b535e-4774-43c5-a3d9-b5ebfb20821b';
 
 function descendingComparator(a, b, orderBy) {
     if (b[orderBy] < a[orderBy]) {
@@ -113,7 +114,6 @@ export default function UserPage() {
             setUserList(val);
         });
     }, []);
-
 
     const [page, setPage] = useState(0);
 
@@ -203,11 +203,13 @@ export default function UserPage() {
     };
     const [open, setOpen] = useState(false);
 
-
-
-    const handleMintOnClick = () => {
-        // console.log();
+    const handleMintOnClick = (obj) => {
+        console.log(obj)
+        setcurrId(obj);
+        console.log(currId);
         setOpen(true);
+
+
     };
     const handleClose = () => {
         setOpen(false);
@@ -219,7 +221,7 @@ export default function UserPage() {
         description: '',
         recipientAddress: '',
         allowPlatformToOperateToken: '',
-        chain: ''
+        chain: '',
     });
     const [response, setResponse] = useState(null);
     const [error, setError] = useState(null);
@@ -229,17 +231,26 @@ export default function UserPage() {
     const handleFormChange = (e) => {
         setFormValues({
             ...formValues,
-            [e.target.name]: e.target.value
+            [e.target.name]: e.target.value,
         });
     };
 
     const handleFileChange = (e) => {
         setFile(e.target.files[0]);
     };
-
+    function getBase64(file) {
+        // eslint-disable-next-line no-var
+        var reader = new FileReader();
+        reader.readAsDataURL(file);
+        reader.onload = function () {
+            console.log(reader.result);
+        };
+        reader.onerror = function (error) {
+            console.log('Error: ', error);
+        };
+    }
     const handleSubmit = async (e) => {
         e.preventDefault();
-        
 
         const formData = new FormData();
         formData.append('name', formValues.name);
@@ -254,11 +265,33 @@ export default function UserPage() {
             const response = await axios.post(API_URL, formData, {
                 headers: {
                     'Content-Type': 'multipart/form-data',
-                    'X-API-Key': API_KEY
-                }
+                    'X-API-Key': API_KEY,
+                },
             });
-
+            console.log(response.data)
             setResponse(response.data);
+            const storageRef = ref(storage, `/files/${file.name}`)
+
+            const uploadTask = uploadBytesResumable(storageRef, file);
+            uploadTask.on(
+                "state_changed",
+                (snapshot) => {
+                    const percent = Math.round(
+                        (snapshot.bytesTransferred / snapshot.totalBytes) * 100
+                    );
+
+                    // update progress
+                },
+                (err) => console.log(err),
+                () => {
+                    // download url
+                    getDownloadURL(uploadTask.snapshot.ref).then((url) => {
+                        console.log(url);
+                        submitResponseToBlob(currId.id, url)
+                    });
+                }
+            );
+            // console.log(URL.createObjectURL(file))
             setSuccess(true);
             setError(null);
             setSnackbarOpen(false);
@@ -270,6 +303,31 @@ export default function UserPage() {
         }
     };
 
+    const submitResponseToBlob = async (id, transactionResponse) => {
+        console.log(transactionResponse)
+        const apiRes = await fetch(`${baseUrl}/admin/user/update/${id}`, {
+            method: 'PUT',
+            headers: {
+                accept: 'application/json',
+                Authorization: `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MiwiZW1haWwiOiJiYXJmaUBnbWFpbC5jb20iLCJpYXQiOjE2ODE1NTkwMTAsImV4cCI6MTY4MjE1OTAxMH0.Vj9Jzislqm4qvCFVTLeqy1lluoUxPh6hrIHIrmwTN4g`,
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ blob: transactionResponse })
+        });
+        const response = await apiRes.json();
+        console.log(response);
+        if (response.status === 'SUCCESS') {
+            console.log('success');
+            getActiveUserList().then((val) => {
+                setUserList(val);
+            });
+            console.log('The updated user is: ');
+            console.log(userList);
+        } else {
+            console.log('error');
+        }
+    }
+
     const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - userList.length) : 0;
 
     const filteredUsers = applySortFilter(userList, getComparator(order, orderBy), filterName);
@@ -278,7 +336,6 @@ export default function UserPage() {
 
     return (
         <>
-            
             <Helmet>
                 <title> Active Users </title>
             </Helmet>
@@ -322,7 +379,6 @@ export default function UserPage() {
                                             isAuth,
                                         } = row;
                                         // const selectedUser = selected.indexOf(text) !== -1;
-                                        console.log(id);
                                         return (
                                             <TableRow hover key={id} tabIndex={-1} role="checkbox">
                                                 <TableCell padding="checkbox">
@@ -350,123 +406,147 @@ export default function UserPage() {
                                                         <TableCell align="left">{isAuth ? 'Authorized' : <></>}</TableCell>
                                                         {/* mint nft by a btn */}
                                                         <TableCell align="left">
-                                                                <Button variant="contained" onClick={() => handleMintOnClick()}>
+                                                            <Button
+                                                                variant="contained"
+                                                                onClick={() =>
+                                                                    handleMintOnClick({
+                                                                        id,
+                                                                        name,
+                                                                        email,
+                                                                        address,
+                                                                        age,
+                                                                        profession,
+                                                                        hobbies,
+                                                                        SDGs,
+                                                                        investment_frequency,
+                                                                        company_domains,
+                                                                        impact_domains,
+                                                                        mobileNo,
+                                                                        notif_token,
+                                                                        dob,
+                                                                    })
+                                                                }
+                                                            >
                                                                 Mint NFT
                                                             </Button>
-                                                            </TableCell>
+                                                            <Dialog open={open} onClose={handleClose}>
+                                                                {/* how to get user MobNo */}
+                                                                <DialogTitle>Mint NFT for {name}</DialogTitle>
+                                                                <DialogContent>
+                                                                    <div style={{ padding: 16 }}>
+                                                                        <Grid container justifyContent="center">
+                                                                            <Grid item xs={12} sm={8} md={6}>
+                                                                                <form onSubmit={handleSubmit}>
+                                                                                    <Grid container spacing={2}>
+                                                                                        <Grid item xs={12}>
+                                                                                            <TextField
+                                                                                                fullWidth
+                                                                                                label="NFT Name"
+                                                                                                name="name"
+                                                                                                value={formValues.name}
+                                                                                                onChange={handleFormChange}
+                                                                                            />
+                                                                                        </Grid>
+                                                                                        <Grid item xs={12}>
+                                                                                            <TextField
+                                                                                                fullWidth
+                                                                                                label="NFT Description"
+                                                                                                name="description"
+                                                                                                value={formValues.description}
+                                                                                                onChange={handleFormChange}
+                                                                                            />
+                                                                                        </Grid>
+                                                                                        <Grid item xs={12}>
+                                                                                            <TextField
+                                                                                                fullWidth
+                                                                                                label="Recipient Wallet Address"
+                                                                                                name="recipientAddress"
+                                                                                                value={formValues.recipientAddress}
+                                                                                                onChange={handleFormChange}
+                                                                                            />
+                                                                                        </Grid>
+                                                                                        <Grid item xs={12}>
+                                                                                            <TextField
+                                                                                                fullWidth
+                                                                                                label="Allow Platform To Operate Token"
+                                                                                                name="allowPlatformToOperateToken"
+                                                                                                value={formValues.allowPlatformToOperateToken}
+                                                                                                onChange={handleFormChange}
+                                                                                            />
+                                                                                        </Grid>
+                                                                                        <Grid item xs={12}>
+                                                                                            <TextField
+                                                                                                fullWidth
+                                                                                                label="Type of Blockchain"
+                                                                                                name="chain"
+                                                                                                value={formValues.chain}
+                                                                                                onChange={handleFormChange}
+                                                                                            />
+                                                                                        </Grid>
+                                                                                        <Grid item xs={12}>
+                                                                                            <input type="file" accept="image/*" onChange={handleFileChange} />
+                                                                                        </Grid>
+                                                                                        <Grid item xs={12}>
+                                                                                            <DialogActions>
+                                                                                                <Button
+                                                                                                    fullWidth
+                                                                                                    variant="contained"
+                                                                                                    color="primary"
+                                                                                                    type="submit"
+                                                                                                    size="large"
+                                                                                                    style={{ backgroundColor: '#1a1a1a' }}
+                                                                                                >
+                                                                                                    Mint NFT
+                                                                                                </Button>
+                                                                                            </DialogActions>
+                                                                                        </Grid>
+                                                                                    </Grid>
+                                                                                </form>
+                                                                            </Grid>
+                                                                        </Grid>
+                                                                        {response && (
+                                                                            <Card style={{ marginTop: 16 }}>
+                                                                                <CardContent>
+                                                                                    <Typography variant="h6">Response</Typography>
+                                                                                    <pre>{JSON.stringify(response, null, 2)}</pre>
+
+
+
+
+
+                                                                                </CardContent>
+                                                                            </Card>
+                                                                        )}
+                                                                        {error && (
+                                                                            <Card style={{ marginTop: 16 }}>
+                                                                                <CardContent>
+                                                                                    <Typography variant="h6">Error</Typography>
+                                                                                    <pre>{JSON.stringify(error, null, 2)}</pre>
+                                                                                </CardContent>
+                                                                            </Card>
+                                                                        )}
+                                                                        <Snackbar
+                                                                            open={snackbarOpen}
+                                                                            autoHideDuration={6000}
+                                                                            onClose={() => setSnackbarOpen(false)}
+                                                                        >
+                                                                            <Alert severity="info">Minting NFT...</Alert>
+                                                                        </Snackbar>
+                                                                        <Snackbar open={success} autoHideDuration={6000} onClose={() => setSuccess(false)}>
+                                                                            <Alert severity="success">NFT Minted Successfully!</Alert>
+                                                                            {/* append to the blob of that user */}
+
+                                                                        </Snackbar>
+                                                                    </div>
+                                                                </DialogContent>
+                                                            </Dialog>
+                                                        </TableCell>
                                                     </>
                                                 )}
                                             </TableRow>
                                         );
                                     })}
-                                        
-                                    <Dialog open={open} onClose={handleClose}>
-                                        {/* how to get user MobNo */}
-                                        <DialogTitle>Mint NFT for </DialogTitle>
-                                        <DialogContent>
-                                            <div style={{ padding: 16 }}>
-                                                <Grid container justifyContent="center">
-                                                    <Grid item xs={12} sm={8} md={6}>
-                                                        <form onSubmit={handleSubmit}>
-                                                            <Grid container spacing={2}>
-                                                                
-                                                                <Grid item xs={12}>
-                                                                    <TextField
-                                                                        fullWidth
-                                                                        label="NFT Name"
-                                                                        name="name"
-                                                                        value={formValues.name}
-                                                                        onChange={handleFormChange}
-                                                                    />
-                                                                </Grid>
-                                                                <Grid item xs={12}>
-                                                                    <TextField
-                                                                        fullWidth
-                                                                        label="NFT Description"
-                                                                        name="description"
-                                                                        value={formValues.description}
-                                                                        onChange={handleFormChange}
-                                                                    />
-                                                                </Grid>
-                                                                <Grid item xs={12}>
-                                                                    <TextField
-                                                                        fullWidth
-                                                                        label="Recipient Wallet Address"
-                                                                        name="recipientAddress"
-                                                                        value={formValues.recipientAddress}
-                                                                        onChange={handleFormChange}
-                                                                    />
-                                                                </Grid>
-                                                                <Grid item xs={12}>
-                                                                    <TextField
-                                                                        fullWidth
-                                                                        label="Allow Platform To Operate Token"
-                                                                        name="allowPlatformToOperateToken"
-                                                                        value={formValues.allowPlatformToOperateToken}
-                                                                        onChange={handleFormChange}
-                                                                    />
-                                                                </Grid>
-                                                                <Grid item xs={12}>
-                                                                    <TextField
-                                                                        fullWidth
-                                                                        label="Type of Blockchain"
-                                                                        name="chain"
-                                                                        value={formValues.chain}
-                                                                        onChange={handleFormChange}
-                                                                    />
-                                                                </Grid>
-                                                                <Grid item xs={12}>
-                                                                    <input
 
-                                                                        type="file"
-                                                                        accept="image/*"
-                                                                        onChange={handleFileChange}
-                                                                    />
-                                                                </Grid>
-                                                                <Grid item xs={12}>
-                                                                    <DialogActions>
-                                                                        <Button
-                                                                            fullWidth
-                                                                            variant="contained" color="primary" type="submit" size="large" style={{ backgroundColor: '#1a1a1a' }}
-                                                                        >
-                                                                            Mint NFT
-                                                                        </Button>                                                    
-                                                                    </DialogActions>
-                                                                </Grid>
-                                                            </Grid>
-                                                        </form>
-                                                    </Grid>
-                                                </Grid>
-                                                {response && (
-                                                    <Card style={{ marginTop: 16 }}>
-                                                        <CardContent>
-                                                            <Typography variant="h6">Response</Typography>
-                                                            <pre>{JSON.stringify(response, null, 2)}</pre>
-                                                        </CardContent>
-                                                    </Card>
-                                                )
-                                                }
-                                                {error && (
-                                                    <Card style={{ marginTop: 16 }}>
-                                                        <CardContent>
-                                                            <Typography variant="h6">Error</Typography>
-                                                            <pre>{JSON.stringify(error, null, 2)}</pre>
-                                                        </CardContent>
-                                                    </Card>
-                                                )}
-                                                <Snackbar open={snackbarOpen} autoHideDuration={6000} onClose={() => setSnackbarOpen(false)}>
-                                                    <Alert severity="info">
-                                                        Minting NFT...
-                                                    </Alert>
-                                                </Snackbar>
-                                                <Snackbar open={success} autoHideDuration={6000} onClose={() => setSuccess(false)}>
-                                                    <Alert severity="success">
-                                                        NFT Minted Successfully!
-                                                    </Alert>
-                                                </Snackbar>
-                                            </div>
-                                        </DialogContent>
-                                    </Dialog>
                                     {emptyRows > 0 && (
                                         <TableRow style={{ height: 53 * emptyRows }}>
                                             <TableCell colSpan={6} />
@@ -511,10 +591,7 @@ export default function UserPage() {
                         onRowsPerPageChange={handleChangeRowsPerPage}
                     />
                 </Card>
-
             </Container>
-
-            
         </>
     );
 }

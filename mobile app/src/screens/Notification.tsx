@@ -6,24 +6,24 @@ import ChatBot from 'react-native-chatbot-expo';
 const steps = [
   {
     id: '1',
-    message: 'Hello, I am chatbot I am here to guide you!',
+    message: 'Hello, I am Sarthi, I am here to guide you!',
     trigger: '2',
   },
   {
     id: '2',
     options: [
-      { value: 1, label: 'What is Bonds Credits score?', trigger: '4' },
-      { value: 2, label: 'How to buy or sell a bond.', trigger: '3' },
+      { value: 1, label: 'What is Sustainibility Investment?', trigger: '4' },
+      { value: 2, label: 'Why should I use your platform.', trigger: '3' },
     ],
   },
   {
     id: '3',
-    message: 'You can use our app for creating transactions, altering bonds, generating tokens and many other features !!!',
+    message: 'You can view all the sustainable investment options like shares, bonds, EGS, FD, Real Estate, etc at one place. Not only till there you can also comapre among the invetsment options.',
     trigger: '2',
   },
   {
     id: '4',
-    message: 'We calssify your spaces in 3 levels of custom heirarchy. Blocks, Zones and racks. The can be visualized on pur mobile app.',
+    message: 'Socially responsible investing, social investment, sustainable socially conscious, "green" or ethical investing, is any investment strategy which seeks to consider both financial return and social/environmental good to bring about social change regarded as positive by proponents.',
     end: true,
   },
 ];

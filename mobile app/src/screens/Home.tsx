@@ -154,7 +154,8 @@ const Home = ({ navigation }: any) => {
               onPress={() => navigation.navigate("Notification")}
               style={{ width: 32, height: 32, borderRadius: 32 }}
             >
-              <Ionicons name="notifications" size={24} color="#fefefe" />
+              <Ionicons name="chatbubbles" size={24} color="#fefefe" />
+              {/* <MaterialCommunityIcons name="robot" size={24} color="#fefefe" /> */}
             </TouchableOpacity>
             <TouchableOpacity
               onPress={() => navigation.navigate("Wishlist")}

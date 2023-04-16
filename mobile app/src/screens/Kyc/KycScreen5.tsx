@@ -25,7 +25,7 @@ const KycScreen5 = ({ navigation, route }: any) => {
   const [signFile, setsignFile] = useState("");
   const [dematFile, setdematFile] = useState("");
   const [DematFileName, setDematFileName] = useState("");
-  const uploadUriFirebase = async (uri: string) => {
+  const   uploadUriFirebase = async (uri: string) => {
     const response = await fetch(uri);
     const fileUrl = uri.split("/");
     const fileName = fileUrl[fileUrl.length - 1];
