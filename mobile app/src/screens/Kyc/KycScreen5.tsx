@@ -158,7 +158,7 @@ const KycScreen5 = ({ navigation, route }: any) => {
           </Text> */}
           <TouchableOpacity
             onPress={() => pickImage()}
-            style={{ borderColor: '#4896f0', height: 48, width: '100%', alignItems: 'center', justifyContent: 'center', borderRadius: 100, alignSelf: 'center', borderWidth: 1.6 }}>
+            style={{ borderColor: '#4896f0', height: 48, width: '100%', alignItems: 'center', justifyContent: 'center', borderStyle: 'dashed', alignSelf: 'center', borderWidth: 1 }}>
             <Text style={{ color: '#fefefe', fontSize: 18, textAlign: 'center', fontFamily: 'm' }}>Upload your smiling photo</Text>
           </TouchableOpacity>
         </View>
@@ -185,8 +185,8 @@ const KycScreen5 = ({ navigation, route }: any) => {
           {/* <CustButton text="Upload" onButtonPress={() => pickDocument("a")} /> */}
           <TouchableOpacity
             onPress={() => pickDocument("a")}
-            style={{ borderColor: '#4896f0', height: 48, width: '100%', alignItems: 'center', justifyContent: 'center', borderRadius: 100, alignSelf: 'center', borderWidth: 1.6 }}>
-            <Text style={{ color: '#fefefe', fontSize: 18, textAlign: 'center', fontFamily: 'm' }}>Upload Aadhar Card </Text>
+            style={{ borderColor: '#4896f0', height: 48, width: '100%', alignItems: 'center', justifyContent: 'center', borderStyle: 'dashed', alignSelf: 'center', borderWidth: 1 }}>
+            <Text style={{ color: '#fefefe', fontSize: 18, textAlign: 'center', fontFamily: 'm' }}>Upload Mars Card </Text>
           </TouchableOpacity>
         </View>
         {AdharFileName && (
@@ -221,8 +221,8 @@ const KycScreen5 = ({ navigation, route }: any) => {
           {/* <CustButton text="Upload" onButtonPress={() => pickDocument("d")} /> */}
           <TouchableOpacity
             onPress={() => pickDocument("d")}
-            style={{ borderColor: '#4896f0', height: 48, width: '100%', alignItems: 'center', justifyContent: 'center', borderRadius: 100, alignSelf: 'center', borderWidth: 1.6 }}>
-            <Text style={{ color: '#fefefe', fontSize: 18, textAlign: 'center', fontFamily: 'm' }}>Upload DEMAT docs </Text>
+            style={{ borderColor: '#4896f0', height: 48, width: '100%', alignItems: 'center', justifyContent: 'center', borderStyle: 'dashed', alignSelf: 'center', borderWidth: 1 }}>
+            <Text style={{ color: '#fefefe', fontSize: 18, textAlign: 'center', fontFamily: 'm' }}>Upload Consent docs </Text>
           </TouchableOpacity>
         </View>
         {DematFileName && (
@@ -264,7 +264,7 @@ const KycScreen5 = ({ navigation, route }: any) => {
             onPress={() => {
               setHasToSign(true);
             }}
-            style={{ borderColor: '#4896f0', height: 48, width: '100%', alignItems: 'center', justifyContent: 'center', borderRadius: 100, alignSelf: 'center', borderWidth: 1.6 }}>
+            style={{ borderColor: '#4896f0', height: 48, width: '100%', alignItems: 'center', justifyContent: 'center', borderStyle: 'dashed', alignSelf: 'center', borderWidth: 1 }}>
             <Text style={{ color: '#fefefe', fontSize: 18, textAlign: 'center', fontFamily: 'm' }}>Sign your documents</Text>
           </TouchableOpacity>
         </View>
@@ -302,7 +302,7 @@ const KycScreen5 = ({ navigation, route }: any) => {
         )}
         <TouchableOpacity
           onPress={() => uploadAll()}
-          style={{ backgroundColor: '#4896f0', height: 48, width: '100%', alignItems: 'center', justifyContent: 'center', borderRadius: 100, alignSelf: 'center', position: 'absolute', bottom: 64 }}>
+          style={{ backgroundColor: '#4896f0', height: 48, width: '100%', alignItems: 'center', justifyContent: 'center', borderRadius: 80, alignSelf: 'center', position: 'absolute', bottom: 64 }}>
           <Text style={{ color: '#fefefe', fontSize: 18, textAlign: 'center', fontFamily: 'mm' }}>Next</Text>
         </TouchableOpacity>
       </ScrollView>

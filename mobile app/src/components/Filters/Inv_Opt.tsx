@@ -1,5 +1,5 @@
 import { FlatList, StyleSheet, Text, View } from "react-native";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Checkbox } from "react-native-paper";
 import H3 from "../typography/H3";
 const Inv_Opt = (props: {
@@ -7,7 +7,10 @@ const Inv_Opt = (props: {
   setChecked: React.Dispatch<React.SetStateAction<string[]>>;
 }) => {
   const data = ["ESG", "Shares", "Bonds", "Mutual Funds", "FD", "Real Estate"];
-  const [Checked, setChecked] = useState<string[]>(props.Checked);
+const [Checked, setChecked] = useState<string[]>(props.Checked);
+  useEffect(() => {
+    setChecked(props.Checked)
+  }, [props.Checked])  
   return (
     <View>
       <FlatList

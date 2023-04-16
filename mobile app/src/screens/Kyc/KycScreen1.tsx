@@ -43,12 +43,12 @@ const KycScreen1 = ({navigation}:any) => {
               </Text>
               <View style={[styles.container]}>
                 <View style={[styles.searchBar]}>
-                  <Text style={{ color: "grey" }}>+91</Text>
+                  <Text style={{ color: "grey" }}></Text>
                   <TextInput
                     keyboardType="number-pad"
                     style={styles.input}
                     value={values.phone}
-                    placeholder={"99999 88888"}
+                    placeholder={"Eg: 65118 14456 54781"}
                     onChangeText={handleChange("phone")}
                     placeholderTextColor={"grey"}
                   />

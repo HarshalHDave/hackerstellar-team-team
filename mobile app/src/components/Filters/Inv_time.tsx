@@ -7,7 +7,7 @@ const Inv_time = (props: {
   Checked: string;
   setChecked: React.Dispatch<React.SetStateAction<string>>;
 }) => {
-  const data = ["One Time", "Monthlhy", "Daily", "Weekly"];
+  const data = ["One Time", "Monthly", "Daily", "Weekly"];
   return (
     <View>
       <FlatList
@@ -16,9 +16,9 @@ const Inv_time = (props: {
           <View style={{ flexDirection: 'row', alignItems: 'center' }}>
             <RadioButton
               value={val.index.toString()}
-              status={val.index.toString() === props.Checked ? "checked" : "unchecked"}
+              status={val.item.toString() === props.Checked ? "checked" : "unchecked"}
               onPress={() => {
-                props.setChecked(val.index.toString());
+                props.setChecked(val.item.toString());
               }}
               color="#308CF6"
             />

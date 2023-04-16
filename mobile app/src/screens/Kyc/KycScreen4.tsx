@@ -34,14 +34,14 @@ const KycScreen4 = ({ navigation, route }: any) => {
                   marginTop: 20,
                 }}
               >
-                Address Line 1:
+                Your colony:
               </Text>
               <View style={[styles.container]}>
                 <View style={[styles.searchBar]}>
                   <TextInput
                     style={styles.input}
                     value={values.addrLine1}
-                    placeholder={"Eg: A101, Sargun Towers"}
+                    placeholder={"Eg: A57, Elon Colony"}
                     onChangeText={handleChange("addrLine1")}
                     placeholderTextColor={"grey"}
                   />
@@ -68,14 +68,14 @@ const KycScreen4 = ({ navigation, route }: any) => {
                   marginTop: 20,
                 }}
               >
-                Address Line 2:
+                Nearby Crater:
               </Text>
               <View style={[styles.container]}>
                 <View style={[styles.searchBar]}>
                   <TextInput
                     style={styles.input}
                     value={values.addrline2}
-                    placeholder={"Eg: Thane West"}
+                    placeholder={"Eg: Kalpana Chawla Peak"}
                     onChangeText={handleChange("addrline2")}
                     placeholderTextColor={"grey"}
                   />
@@ -102,7 +102,7 @@ const KycScreen4 = ({ navigation, route }: any) => {
                   marginTop: 20,
                 }}
               >
-                Pincode :
+                Pincode:
               </Text>
               <View style={[styles.container]}>
                 <View style={[styles.searchBar]}>
@@ -137,7 +137,7 @@ const KycScreen4 = ({ navigation, route }: any) => {
                   marginTop: 20,
                 }}
               >
-                Your city :
+                Your zone:
               </Text>
               <View style={[styles.container]}>
                 <View style={[styles.searchBar]}>
@@ -145,7 +145,7 @@ const KycScreen4 = ({ navigation, route }: any) => {
                     style={styles.input}
                     value={values.city}
                     // keyboardType='city-address'
-                    placeholder={"Eg: Mumbai"}
+                    placeholder={"Eg: AJIN"}
                     onChangeText={handleChange("city")}
                     placeholderTextColor={"grey"}
                   />
@@ -184,7 +184,7 @@ const KycScreen4 = ({ navigation, route }: any) => {
                   <TextInput
                     style={[styles.input]}
                     value={values.state}
-                    placeholder={"Eg: Maharashtra"}
+                    placeholder={"Eg: Mersamora"}
                     onChangeText={handleChange("state")}
                     placeholderTextColor={"grey"}
                   />

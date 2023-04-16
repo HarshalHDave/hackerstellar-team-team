@@ -9,36 +9,22 @@ import React, { useState } from "react";
 import SafeArea from "../../components/SafeArea";
 import Button from "../../components/Button";
 
-const KycScreen7 = ({navigation,route}:any) => {
-  const hobbies = [
-    "Acting",
-    "Candle making",
-    "Computer programming",
-    "Coffee roasting",
-    "Cooking",
-    "Colouring",
-    "Dance",
-    "Digital arts",
-    "Drawing",
-    "Electronics",
-    "Embroidery",
-    "Fashion",
-    "Flower arranging",
-    "Foreign language learning",
-    "Gaming",
-    "Listening to music",
-    "Origami",
-    "Painting",
-    "Playing musical instruments",
-    "Pottery",
-    "Puzzles",
-    "Reading",
-    "Singing",
-    "Sports",
-    "Cycling",
-    "Driving",
-    "Fishing",
-  ];
+const KycScreen7 = ({ navigation, route }: any) => {
+  const hobbies =
+    [
+      "Environment",
+      "Fair Labor",
+      "Clean Tech",
+      "Community Development",
+      "Equality & Diversity",
+      "Human Rights",
+      "Animal Welfare",
+      "Non-Violence",
+      "Corporate GOvernance",
+      "Healthy Living",
+      "Fossil-Fuel Free",
+      "Shareholder Advocacy"
+    ];
   const [Hobbies, setHobbies] = useState<string[]>([]);
   return (
     <SafeArea>
@@ -52,23 +38,23 @@ const KycScreen7 = ({navigation,route}:any) => {
               style={
                 Hobbies.includes(val.item)
                   ? {
-                      padding: 15,
-                      borderWidth: 1,
-                      marginHorizontal: 8,
-                      marginTop: 10,
-                      borderRadius: 80,
-                      backgroundColor: "#DEAD84",
-                      // elevation: 5
-                    }
+                    padding: 15,
+                    borderWidth: 1,
+                    marginHorizontal: 8,
+                    marginTop: 10,
+                    borderRadius: 80,
+                    backgroundColor: "#4896f0",
+                    // elevation: 5
+                  }
                   : {
-                      padding: 15,
-                      // borderColor: "#E2C2AA",
-                      // borderWidth: 1,
-                      borderRadius: 80,
-                      marginHorizontal: 8,
-                      marginTop: 10,
-                      backgroundColor: "#E2C2AA",
-                    }
+                    padding: 15,
+                    // borderColor: "#E2C2AA",
+                    borderWidth: 1,
+                    borderRadius: 8,
+                    marginHorizontal: 8,
+                    marginTop: 10,
+                    borderColor: "#4896f0",
+                  }
               }
               onPress={() => {
                 if (Hobbies.includes(val.item)) {
@@ -82,13 +68,17 @@ const KycScreen7 = ({navigation,route}:any) => {
                 }
               }}
             >
-              <Text style={{ color: "#563300" }}>{val.item}</Text>
+              <Text style={{ color: "#dedede", fontFamily: 'm' }}>{val.item}</Text>
             </TouchableOpacity>
           )}
         />
-        <Button text="Next" onPressed={()=>{
-            navigation.navigate("KycScreen8",{...route.params,hobbies:Hobbies.join(" , ")})
-        }}/>
+        <TouchableOpacity
+          onPress={() => {
+            navigation.navigate("KycScreen8", { ...route.params, hobbies: Hobbies.join(" , ") })
+          }}
+          style={{ backgroundColor: '#4896f0', height: 48, width: '100%', alignItems: 'center', justifyContent: 'center', borderRadius: 80, alignSelf: 'center', position: 'absolute', bottom: 64 }}>
+          <Text style={{ color: '#fefefe', fontSize: 18, textAlign: 'center', fontFamily: 'mm' }}>Next</Text>
+        </TouchableOpacity>
       </>
     </SafeArea>
   );

@@ -17,41 +17,52 @@ const KycScreen7 = ({ navigation, route }: any) => {
   const auth = useAppContext();
   return (
     <SafeArea>
-      <View style={{ justifyContent: "center", flex: 1, alignItems: "center" }}>
-        <FlatList
-          data={SDG}
-          numColumns={2}
-          renderItem={(val) => (
-            <TouchableOpacity
-              style={{ marginTop: 10, marginHorizontal: 10 }}
-              onPress={() => {
-                var arr = [...Selected];
-                if (arr.includes(val.index.toString())) {
-                  arr = arr.filter((ele) => ele != val.index.toString());
-                } else {
-                  arr.push(val.index.toString());
-                }
-                setSelected(arr);
-                // console.log(Selected)
-              }}
-            >
-              <Image
-                source={{ uri: val.item.link }}
-                style={[
-                  { height: 150, width: 150 },
-                  Selected.includes(val.index.toString()) && {
-                    borderWidth: 1,
-                    borderColor: "white",
-                  },
-                ]}
-              ></Image>
-            </TouchableOpacity>
-          )}
-        />
-        <Button text="Ready Set Go!" onPressed={()=>{
-          auth?.signUp({...route.params , SDGs : Selected.join(' , ')})
-        }}/>
-      </View>
+      <>
+        <Text style={{ color: "#dedede", fontSize: 24, marginTop: 8, fontFamily: 'm', marginBottom: 8 }}>
+          Select the UN SDGs that appeal you the most
+        </Text>
+        <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+          <FlatList
+            data={SDG}
+            numColumns={2}
+            renderItem={(val) => (
+              <TouchableOpacity
+                style={{ marginTop: 8, marginRight: 8 }}
+                onPress={() => {
+                  var arr = [...Selected];
+                  if (arr.includes(val.index.toString())) {
+                    arr = arr.filter((ele) => ele != val.index.toString());
+                  } else {
+                    arr.push(val.index.toString());
+                  }
+                  setSelected(arr);
+                  // console.log(Selected)
+                }}
+              >
+                <Image
+                  source={{ uri: val.item.link }}
+                  style={[
+                    { height: 160, width: 160, opacity: 0.4 },
+                    Selected.includes(val.index.toString()) && {
+                      borderWidth: 4,
+                      padding: 4,
+                      opacity: 1,
+                      borderColor: "#dedede",
+                    },
+                  ]}
+                ></Image>
+              </TouchableOpacity>
+            )}
+          />
+          <TouchableOpacity
+            onPress={() => {
+              auth?.signUp({ ...route.params, SDGs: Selected.join(' , ') })
+            }}
+            style={{ backgroundColor: '#4896f0', height: 48, width: '100%', alignItems: 'center', justifyContent: 'center', borderRadius: 80, alignSelf: 'center' }}>
+            <Text style={{ color: '#fefefe', fontSize: 18, textAlign: 'center', fontFamily: 'mm' }}>Get set go</Text>
+          </TouchableOpacity>
+        </View>
+      </>
     </SafeArea>
   );
 };

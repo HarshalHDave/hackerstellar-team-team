@@ -61,7 +61,7 @@ const Login = ({ navigation }: any) => {
                   fontFamily: 'm'
                 }}
               >
-                Dont Have and Account ?
+                Dont Have an Account ?
                 <Text style={{ color: 'cyan' }} onPress={() => { navigation.navigate('Signup') }}>{'  '}Sign Up</Text>
               </Text>
               <View style={[styles.container]}>

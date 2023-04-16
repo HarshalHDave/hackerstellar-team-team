@@ -1,5 +1,5 @@
 import { FlatList, StyleSheet, Text, TextInput, View } from "react-native";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Cntry from "../../../assets/data/countries.json";
 import { Checkbox } from "react-native-paper";
 import BigList from "react-native-big-list";
@@ -9,6 +9,9 @@ const Country = (props: {
   setChecked: React.Dispatch<React.SetStateAction<string[]>>;
 }) => {
   const [Checked, setChecked] = useState<string[]>(props.Checked);
+  useEffect(() => {
+    setChecked(props.Checked);
+  }, [props.Checked]);
   const [RenderCntry, setRenderCntry] = useState<string[]>(Cntry);
 
   return (
@@ -21,7 +24,7 @@ const Country = (props: {
           marginVertical: 8,
           flexDirection: "row",
           alignItems: "center",
-          marginHorizontal:10
+          marginHorizontal: 10,
         }}
       >
         <TextInput
@@ -31,7 +34,7 @@ const Country = (props: {
             if (text == "") {
               setRenderCntry(Cntry);
             } else {
-              var tempData:any[] = [];
+              var tempData: any[] = [];
               Cntry.forEach((item) => {
                 if (JSON.stringify(item).includes(text)) {
                   tempData.push(item);

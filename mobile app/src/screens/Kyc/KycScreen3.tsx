@@ -61,7 +61,7 @@ const KycScreen3 = ({ navigation, route }: any) => {
                   {errors.fname}
                 </Text>
               )}
-              <Text
+              {/* <Text
                 style={{
                   fontSize: 15,
                   fontWeight: "bold",
@@ -94,7 +94,7 @@ const KycScreen3 = ({ navigation, route }: any) => {
                 >
                   {errors.middle}
                 </Text>
-              )}
+              )} */}
               <Text
                 style={{
                   fontSize: 15,

@@ -1,6 +1,6 @@
 import axios from "axios";
 import { baseUrl } from "./BaseUrl";
-import { UserSignUp } from "./interfaces";
+import { StockData, UserSignUp } from "./interfaces";
 
 export const loginFun = async (uname: string, pass: string) => {
   const res = await axios.post(baseUrl + "/admin/auth/login", {
@@ -15,8 +15,8 @@ export const SignUpFun = async (
   pass: string,
   token: string
 ) => {
-  console.log(pass)
-  console.log(obj)
+  console.log(pass);
+  console.log(obj);
   const res = await axios.post(
     baseUrl + "/admin/user/create",
     {
@@ -56,4 +56,137 @@ export const SignUpFun = async (
   );
   console.log(res.data);
   return res.data.status == "SUCCESS";
+};
+
+export const giveSorted = (arr: StockData[], foo: string) => {
+
+  if (foo == "0") {
+    let sorted = arr.sort((p1, p2) =>
+      p1.market_cap > p2.market_cap ? 1 : p1.market_cap < p2.market_cap ? -1 : 0
+    );
+    return sorted;
+  }
+  if (foo == "1") {
+    let sorted = arr.sort((p1, p2) =>
+      p1.score > p2.score ? 1 : p1.score < p2.score ? -1 : 0
+    );
+    return sorted;
+  }
+  if (foo == "2") {
+    let sorted = arr.sort((p1, p2) =>
+      p1.transperancy_score > p2.transperancy_score
+        ? 1
+        : p1.transperancy_score < p2.transperancy_score
+        ? -1
+        : 0
+    );
+    return sorted;
+  }
+  if (foo == "3") {
+    let sorted = arr.sort((p1, p2) =>
+      p1.enviroment_score > p2.enviroment_score
+        ? 1
+        : p1.enviroment_score < p2.enviroment_score
+        ? -1
+        : 0
+    );
+    return sorted;
+  }
+  if (foo == "4") {
+    let sorted = arr.sort((p1, p2) =>
+      p1.social_score > p2.social_score
+        ? 1
+        : p1.social_score < p2.social_score
+        ? -1
+        : 0
+    );
+    return sorted;
+  }
+  if (foo == "5") {
+    let sorted = arr.sort((p1, p2) =>
+      p1.govern_score > p2.govern_score
+        ? 1
+        : p1.govern_score < p2.govern_score
+        ? -1
+        : 0
+    );
+    return sorted;
+  }
+};
+export const giveInvOption = (arr: StockData[], foo: string[]) => {
+  let finalArr: any[] = [];
+  console.log(foo);
+  foo.forEach((val) => {
+    finalArr = [
+      ...arr.filter((item) => item.investment_type == val),
+      ...finalArr,
+    ];
+  });
+  return finalArr;
+};
+export const giveCompanySize = (arr: StockData[], foo: string[]) => {
+  let finalArr: any[] = [];
+  console.log(foo);
+  foo.forEach((val) => {
+    finalArr = [
+      ...arr.filter(
+        (item) => item.company_size.toLowerCase() == val.toLowerCase()
+      ),
+      ...finalArr,
+    ];
+  });
+  return finalArr;
+};
+export const giveRisk = (arr: StockData[], foo: string[]) => {
+  let finalArr: any[] = [];
+  console.log(foo);
+  foo.forEach((val) => {
+    finalArr = [...arr.filter((item) => item.risk == val), ...finalArr];
+  });
+  return finalArr;
+};
+export const giveCountry = (arr: StockData[], foo: string[]) => {
+  let finalArr: any[] = [];
+  console.log(foo);
+  foo.forEach((val) => {
+    finalArr = [...arr.filter((item) => item.country == val), ...finalArr];
+  });
+  return finalArr;
+};
+export const giveInvFreq = (arr: StockData[], foo: string[]) => {
+  let finalArr: any[] = [];
+  console.log(foo);
+  foo.forEach((val) => {
+    finalArr = [
+      ...arr.filter((item) => item.investment_frequency == val),
+      ...finalArr,
+    ];
+  });
+  return finalArr;
+};
+export const giveCompInd = (arr: StockData[], foo: string[]) => {
+  let finalArr: any[] = [];
+  console.log(foo);
+  foo.forEach((val) => {
+    finalArr = [...arr.filter((item) => item.industry == val), ...finalArr];
+  });
+  return finalArr;
+};
+export const giveImpDom = (arr: StockData[], foo: string[]) => {
+  let finalArr: any[] = [];
+  console.log(foo);
+  foo.forEach((val) => {
+    finalArr = [
+      ...arr.filter((item) => item.impact_categorey == val),
+      ...finalArr,
+    ];
+  });
+  return finalArr;
+};
+export const giveMinAmm = (arr: StockData[], foo: number) => {
+  console.log(foo);
+  return arr.filter((val) => {
+    console.log(Number(val.min_amnt_invest));
+    return Number(val.min_amnt_invest) < foo;
+  });
 };

@@ -58,3 +58,42 @@ export interface User {
     state: string
   }
   
+  export interface StockData {
+    id: number
+    isDeleted: boolean
+    isActive: boolean
+    createdAt: string
+    updatedAt: string
+    addedBy: number
+    updatedBy: any
+    name: string
+    sub_heading: string
+    description: string
+    company_img: string
+    comapny_name: string
+    investment_type: string
+    company_size: string
+    comany_desc: string
+    mstr_qty: string
+    risk: string
+    market_cap: string
+    country: string
+    founding_year: string
+    investment_frequency: string
+    price: string
+    SDG_solved: string
+    industry: string
+    min_amnt_invest: string
+    impact_categorey: string
+    investment_body: string
+    score: string
+    transperancy_score: string
+    enviroment_score: string
+    social_score: string
+    govern_score: string
+    global_rank: string
+    industry_rank: string
+    blob: string
+    blob2: string
+    blob3: string
+  }
